@@ -112,47 +112,42 @@ class Board:
             grille[y + 1][x + 1] = "S"
 
         x, y = self.snake[0]
-        grille[y + 1][x] = "H"
-    
+        grille[y + 1][x + 1] = "H"
+
         for x, y in self.apple["green"]:
-            grille[y][x] = "G"
+            grille[y + 1][x + 1] = "G"
 
         x, y = self.apple["red"]
-        grille[y][x] = "R"
+        grille[y + 1][x + 1] = "R"
 
         for ligne in grille:
             print(" ".join(ligne))
         return grille
 
+    def watch(self, grille, x, y, dx, dy):
+        vision = []
+        x += dx
+        y += dy
+        while grille[y][x] != "W":
+            vision.append(grille[y][x])
+            x += dx
+            y += dy
+        vision.append("W")
+        return vision
+
     def get_vision(self):
         x, y = self.snake[0]
         grille = self.visualizer()
 
-        left = grille[y][x-1] if x > 0 else "W"
-        right = grille[y][x+1] if x < self.width - 1 else "W"
-        up = grille[y-1][x] if y > 0 else "W"
-        down = grille[y+1][x] if y < self.height - 1 else "W"
-        return left, right, up, down
+        x += 1
+        y += 1
 
+        left = self.watch(grille, x, y, -1, 0)
+        right = self.watch(grille, x, y, 1, 0)
+        up = self.watch(grille, x, y, 0, -1)
+        down = self.watch(grille, x, y, 0, 1)
 
-
-        
-        
-
-def afficher(self):
-    grille = [["." for _ in range(board.width)] for _ in range(board.height)]
-
-    for x, y in board.snake:
-        grille[y][x] = "S"
-
-    for x, y in board.apple["green"]:
-        grille[y][x] = "G"
-
-    x, y = board.apple["red"]
-    grille[y][x] = "R"
-
-    for ligne in grille:
-        print(" ".join(ligne))
+        return left, right, up, down   
 
 board = Board(10, 10)
-board.afficher()
+print(board.get_vision())
