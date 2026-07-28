@@ -1,46 +1,12 @@
-import random
+from snake import (
+    check_allapple,
+    check_allsnake,
+    generate_body,
+    generate_number,
+    simplificated_state,
+    spawn_snake,
+)
 
-def generate_number(size):
-    return random.randint(0, size - 1)
-
-def generate_body(x, y):
-    direction = random.choice([
-        (0, 1),   # haut
-        (0, -1),  # bas
-        (-1, 0),  # gauche
-        (1, 0)    # droite
-    ])
-
-    dx, dy = direction
-    return x + dx, y + dy
-
-def spawn_snake(size):
-    x = generate_number(size)
-    y = generate_number(size)
-
-    while True:
-        x1, y1 = generate_body(x, y)
-        if 0 <= x1 < size and 0 <= y1 < size:
-            break
-    
-    while True:
-        x2, y2 = generate_body(x1, y1)
-        if (0 <= x2 < size and 0 <= y2 < size and (x2, y2) != (x, y)):
-            break
-    
-    return [(x,y), (x1, y1), (x2, y2)]
-
-def check_allsnake(x, y, snake):
-    for position in snake:
-        if position == (x,y):
-            return False
-    return True
-
-def check_allapple(x, y, apples):
-    # apples = {"green": [pos1, pos2], "red": pos3}
-    # On aplatit tout en une liste de positions a comparer
-    all_apple_positions = apples["green"] + [apples["red"]]
-    return (x, y) not in all_apple_positions
 
 class Board:
     def __init__(self, width, height):
@@ -52,6 +18,7 @@ class Board:
             "green": [None, None],
             "red": None,
         }
+        self.alive = True
         self.init_apple(width)
 
     def spawn_apple(self, size):
@@ -75,6 +42,8 @@ class Board:
         x, y = x + dx, y + dy    
 
         if x < 0 or x >= size or y < 0 or y >= size:
+            self.alive = False
+            print("Game Over: Snake hit the wall.")
             return False, -100
         
         if (not check_allapple(x, y, apple)):
@@ -83,6 +52,8 @@ class Board:
                 self.snake.pop()
                 self.snake.pop()
                 if (len(self.snake) <= 0):
+                    self.alive = False
+                    print("Game Over: Snake has no body left after eating red apple.")
                     return False, -150
                 apple["red"] = self.spawn_apple(size)
                 return True, -50
@@ -95,6 +66,8 @@ class Board:
         else:
             self.snake.pop()
             if (not check_allsnake(x, y, self.snake)):
+                self.alive = False
+                print("Game Over: Snake collided with itself.")
                 return False, -100
             self.snake.insert(0, (x,y))
             return True, -10
@@ -147,7 +120,4 @@ class Board:
         up = self.watch(grille, x, y, 0, -1)
         down = self.watch(grille, x, y, 0, 1)
 
-        return left, right, up, down   
-
-board = Board(10, 10)
-print(board.get_vision())
+        return simplificated_state(left, right, up, down)
