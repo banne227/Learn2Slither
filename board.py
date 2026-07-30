@@ -1,7 +1,6 @@
 from snake import (
     check_allapple,
     check_allsnake,
-    generate_body,
     generate_number,
     simplificated_state,
     spawn_snake,
@@ -39,26 +38,27 @@ class Board:
         apple = self.apple
         x, y = self.snake[0]
         dx, dy = action
-        x, y = x + dx, y + dy    
+        x, y = x + dx, y + dy
 
         if x < 0 or x >= size or y < 0 or y >= size:
             self.alive = False
             print("Game Over: Snake hit the wall.")
             return -100
-        
+
         if (not check_allapple(x, y, apple)):
-            self.snake.insert(0, (x,y))
-            if ((x,y) == apple["red"]):
+            self.snake.insert(0, (x, y))
+            if ((x, y) == apple["red"]):
                 self.snake.pop()
                 self.snake.pop()
                 if (len(self.snake) <= 0):
                     self.alive = False
-                    print("Game Over: Snake has no body left after eating red apple.")
+                    print("Game Over: Snake has no body left "
+                          "after eating red apple.")
                     return -150
                 apple["red"] = self.spawn_apple(size)
                 return -50
             else:
-                if ((x,y) == apple["green"][0]):
+                if ((x, y) == apple["green"][0]):
                     apple["green"][0] = self.spawn_apple(size)
                 else:
                     apple["green"][1] = self.spawn_apple(size)
@@ -69,14 +69,14 @@ class Board:
                 self.alive = False
                 print("Game Over: Snake collided with itself.")
                 return -100
-            self.snake.insert(0, (x,y))
+            self.snake.insert(0, (x, y))
             return -10
 
     def get_grid(self):
         grille = [
             [
-                "W" if x in (0, self.width + 1) or y in (0, self.height + 1) else "."
-                for x in range(self.width + 2)
+                "W" if x in (0, self.width + 1) or y in (0, self.height + 1)
+                else "." for x in range(self.width + 2)
             ]
             for y in range(self.height + 2)
         ]

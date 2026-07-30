@@ -25,18 +25,18 @@ def spawn_snake(size):
         x1, y1 = generate_body(x, y)
         if 0 <= x1 < size and 0 <= y1 < size:
             break
-    
+
     while True:
         x2, y2 = generate_body(x1, y1)
         if (0 <= x2 < size and 0 <= y2 < size and (x2, y2) != (x, y)):
             break
-    
-    return [(x,y), (x1, y1), (x2, y2)]
+
+    return [(x, y), (x1, y1), (x2, y2)]
 
 
 def check_allsnake(x, y, snake):
     for position in snake:
-        if position == (x,y):
+        if position == (x, y):
             return False
     return True
 
@@ -50,13 +50,16 @@ def check_allapple(x, y, apples):
 
 def get_one_state(direction):
     if direction[0] == "W" or direction[0] == "S":
-        return "D" #danger
+        return "D"  # danger
     else:
         for element in direction:
             if element is not None and element != "W" and element != ".":
                 return element
-    return "E" #empty
+    return "E"  # empty
 
 
 def simplificated_state(left, right, up, down):
-    return " ".join([get_one_state(left), get_one_state(right), get_one_state(up), get_one_state(down)])
+    return " ".join([
+        get_one_state(left), get_one_state(right),
+        get_one_state(up), get_one_state(down)
+    ])

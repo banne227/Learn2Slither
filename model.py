@@ -1,8 +1,10 @@
 import json
 
+
 def save_model(Q, path):
     with open(path, "w") as f:
         json.dump(Q, f)
+
 
 def load_model(path):
     with open(path, "r") as f:

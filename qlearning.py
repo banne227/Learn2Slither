@@ -31,26 +31,3 @@ def action_to_delta(action):
         return (0, 1)
     else:
         raise ValueError("Invalid action")
-
-#gamma actualisation factor, alpha learning rate, espsilon random exploration factor, dont_learn if True the model will not learn
-def train(nb_sessions, dont_learn=False, alpha=0.1, gamma=0.9, epsilon=0.9,load_path=None, save_path=None):
-    Q = {}
-    if load_path is not None:
-        loaded_Q = load_model(load_path)
-        if loaded_Q is not None:
-            Q = loaded_Q
-
-    for session in range(nb_sessions):
-        board = Board(10, 10)
-        state = board.get_vision()
-        while board.is_alive():
-            action = choose_action(Q, state, epsilon)
-            reward = board.step(action_to_delta(action), board.width)
-            next_state = board.get_vision()
-            if not dont_learn:
-                update_q(Q, state, action, reward, next_state, alpha, gamma)
-            state = next_state
-        epsilon = max(0.05, epsilon * 0.995)  # Epsilon reduce after each session 
-    if save_path is not None:
-        save_model(Q, save_path)
-    return Q
