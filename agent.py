@@ -6,7 +6,10 @@ from qlearning import choose_action, update_q, action_to_delta, load_model, save
 
 def run(nb_sessions, load_path, save_path, dont_learn, visual, step_by_step, speed=0.1):
     Q = load_model(load_path) if load_path else {}
-    epsilon = 0.05 if dont_learn else 0.9  # exploitation pure si dont_learn
+    epsilon = 0.01 if dont_learn else 0.9  # exploitation pure si dont_learn
+    when, max_score = 0, 0
+
+    #print("Q table at start:", Q)
 
     if visual == "on":
         pygame.init()
@@ -15,6 +18,7 @@ def run(nb_sessions, load_path, save_path, dont_learn, visual, step_by_step, spe
     for session in range(nb_sessions):
         board = Board(10, 10)
         state = board.get_vision()
+        print(f"Session {session + 1}/{nb_sessions}")
 
         while board.is_alive():
             if visual == "on":
@@ -38,8 +42,12 @@ def run(nb_sessions, load_path, save_path, dont_learn, visual, step_by_step, spe
                     input("Appuie sur Entrée pour continuer...")
                 else:
                     time.sleep(speed)
-
+            
+            if board.score > max_score:
+                when = session
+                max_score = board.score
         epsilon = max(0.05, epsilon * 0.995)
 
+    print(f"Meilleur score atteint : {max_score} à la session {when + 1}/{nb_sessions}")
     if save_path:
         save_model(Q, save_path)

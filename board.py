@@ -114,7 +114,7 @@ class Board:
 
     def get_vision(self):
         x, y = self.snake[0]
-        grille = self.visualizer()
+        grille = self.get_grid()
 
         x += 1
         y += 1
@@ -128,3 +128,7 @@ class Board:
 
     def is_alive(self):
         return self.alive
+
+    @property
+    def score(self):
+        return len(self.snake)
