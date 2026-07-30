@@ -1,8 +1,4 @@
-from board import Board
-from qlearning import train
-from ui import init_pygame, draw_board
 import argparse
-import pygame
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-sessions", type=int, default=1)
@@ -12,11 +8,3 @@ parser.add_argument("-visual", type=str, choices=["on", "off"], default="on")
 parser.add_argument("-dontlearn", action="store_true")
 parser.add_argument("-step-by-step", action="store_true")
 args = parser.parse_args()
-
-screen = init_pygame(400, 400)
-board = Board(10,10)
-print(board.get_vision())
-draw_board(screen, board)
-print()
-board.step((1,0), 10)
-print(board.get_vision())

@@ -44,7 +44,7 @@ class Board:
         if x < 0 or x >= size or y < 0 or y >= size:
             self.alive = False
             print("Game Over: Snake hit the wall.")
-            return False, -100
+            return -100
         
         if (not check_allapple(x, y, apple)):
             self.snake.insert(0, (x,y))
@@ -54,25 +54,25 @@ class Board:
                 if (len(self.snake) <= 0):
                     self.alive = False
                     print("Game Over: Snake has no body left after eating red apple.")
-                    return False, -150
+                    return -150
                 apple["red"] = self.spawn_apple(size)
-                return True, -50
+                return -50
             else:
                 if ((x,y) == apple["green"][0]):
                     apple["green"][0] = self.spawn_apple(size)
                 else:
                     apple["green"][1] = self.spawn_apple(size)
-                return True, 100
+                return 100
         else:
             self.snake.pop()
             if (not check_allsnake(x, y, self.snake)):
                 self.alive = False
                 print("Game Over: Snake collided with itself.")
-                return False, -100
+                return -100
             self.snake.insert(0, (x,y))
-            return True, -10
+            return -10
 
-    def visualizer(self):
+    def get_grid(self):
         grille = [
             [
                 "W" if x in (0, self.width + 1) or y in (0, self.height + 1) else "."
@@ -92,6 +92,10 @@ class Board:
 
         x, y = self.apple["red"]
         grille[y + 1][x + 1] = "R"
+        return grille
+
+    def visualizer(self):
+        grille = self.get_grid()
 
         for ligne in grille:
             print(" ".join(ligne))
@@ -121,3 +125,6 @@ class Board:
         down = self.watch(grille, x, y, 0, 1)
 
         return simplificated_state(left, right, up, down)
+
+    def is_alive(self):
+        return self.alive
