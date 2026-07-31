@@ -7,5 +7,8 @@ def save_model(Q, path):
 
 
 def load_model(path):
-    with open(path, "r") as f:
-        return json.load(f)
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}

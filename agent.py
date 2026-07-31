@@ -1,19 +1,21 @@
-import pygame   
+import pygame
 import time
 from board import Board
-from ui import draw_board, CELL_SIZE, COLORS
-from qlearning import choose_action, update_q, action_to_delta, load_model, save_model
+from ui import draw_board, CELL_SIZE
+from qlearning import choose_action, update_q
+from qlearning import action_to_delta, load_model, save_model
 
-def run(nb_sessions, load_path, save_path, dont_learn, visual, step_by_step, speed=0.1):
+
+def run(nb_sessions, load_path, save_path, dont_learn, visual, step_by_step, speed):
     Q = load_model(load_path) if load_path else {}
     epsilon = 0.01 if dont_learn else 0.9  # exploitation pure si dont_learn
     when, max_score = 0, 0
 
-    #print("Q table at start:", Q)
+    # print("Q table at start:", Q)
 
     if visual == "on":
         pygame.init()
-        screen = pygame.display.set_mode((12 * CELL_SIZE, 12 * CELL_SIZE))  # +2 pour les murs
+        screen = pygame.display.set_mode((12 * CELL_SIZE, 12 * CELL_SIZE))
 
     for session in range(nb_sessions):
         board = Board(10, 10)
