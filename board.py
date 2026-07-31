@@ -113,6 +113,9 @@ class Board:
         return vision
 
     def get_vision(self):
+        if len(self.snake) <= 1:
+            return None
+
         x, y = self.snake[0]
         grille = self.get_grid()
 
@@ -129,6 +132,5 @@ class Board:
     def is_alive(self):
         return self.alive
 
-    @property
     def score(self):
         return len(self.snake)

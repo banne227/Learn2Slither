@@ -17,5 +17,5 @@ run(
     args.dontlearn,
     args.visual,
     args.step_by_step,
-    0.1,
+    0.5,
 )

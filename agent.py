@@ -57,9 +57,9 @@ def run(
                 else:
                     time.sleep(speed)
 
-            if board.score > max_score:
+            if board.score() > max_score:
                 when = session
-                max_score = board.score
+                max_score = board.score()
         epsilon = max(0.05, epsilon * 0.995)
 
     print(
