@@ -2,8 +2,8 @@ import pygame
 import time
 from board import Board
 from ui import draw_board, CELL_SIZE
-from qlearning import choose_action, update_q
-from qlearning import action_to_delta, load_model, save_model
+from qlearning import choose_action, update_q, action_to_delta
+from model import load_model, save_model
 
 
 def run(
