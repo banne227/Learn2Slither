@@ -10,12 +10,15 @@ parser.add_argument("-dontlearn", action="store_true")
 parser.add_argument("-step-by-step", action="store_true")
 args = parser.parse_args()
 
-run(
-    args.sessions,
-    args.load,
-    args.save,
-    args.dontlearn,
-    args.visual,
-    args.step_by_step,
-    0.5,
-)
+try:
+    run(
+        args.sessions,
+        args.load,
+        args.save,
+        args.dontlearn,
+        args.visual,
+        args.step_by_step,
+        0.1,
+    )
+except Exception as e:
+    print(f"An error occurred: {e}")
